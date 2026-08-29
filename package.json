@@ -5,7 +5,8 @@
   "description": "Open-Source, Agent-First, Autonomous Business Analytics Desktop Platform",
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
     "build": "tsc -b",
@@ -13,9 +14,11 @@
     "test:m0": "node --test --import tsx tests/integration/m0_foundation.test.ts",
     "test:m1": "node --test --import tsx tests/integration/m1_agent_runtime.test.ts",
     "test:all": "node --test --import tsx packages/**/tests/*.test.ts tests/integration/*.test.ts",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "tauri": "tauri"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
     "@types/node": "^22.20.1",
     "tsx": "^4.23.12",
     "typescript": "^5.9.3",
