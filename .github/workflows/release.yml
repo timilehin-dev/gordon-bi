@@ -30,13 +30,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - name: Upgrade npm to 10.x
-        run: npm install -g npm@10
+          node-version: 22
 
       - name: Setup Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -53,9 +50,10 @@ jobs:
         run: npm install
 
       - name: Run Diagnostics and Automated Tests
+        shell: bash
         run: |
           npm run lint
-          npx tsx --test packages/**/tests/*.test.ts tests/integration/*.test.ts
+          npx tsx --test packages/*/tests/*.test.ts tests/integration/*.test.ts
 
       - name: Build Web Frontend
         run: npm run build --workspace=apps/desktop-ui
@@ -66,6 +64,7 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
 
       - name: Enforce Size Budget (< 100MB)
+        shell: bash
         run: |
           node -e "
             const fs = require('fs');
