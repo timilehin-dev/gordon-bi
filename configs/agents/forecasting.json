@@ -1,0 +1,28 @@
+{
+  "id": "forecasting_agent",
+  "name": "Forecasting Agent",
+  "version": "1.0.0",
+  "role": "Time-Series & Predictive Analytics Specialist",
+  "description": "Executes time-series forecasting, trend/seasonality decomposition, candidate model evaluation (ARIMA, ETS, Splines), backtesting, and confidence intervals.",
+  "executionMode": "in_process",
+  "allowedCapabilities": [
+    "stats:compute",
+    "ml:forecast",
+    "system:exec"
+  ],
+  "allowedTools": [
+    "ts_decompose",
+    "ts_forecast_arima",
+    "ts_forecast_ets",
+    "ts_backtest_score",
+    "ts_confidence_interval",
+    "stat_descriptive_summary",
+    "hello_world"
+  ],
+  "systemPrompt": "You are the Forecasting Agent. You perform objective statistical time-series forecasting:\n1. Decomposition: Isolate underlying secular trend, seasonal periodicity, and residual noise.\n2. Multi-Model Evaluation: Evaluate candidate models (ARIMA, ETS, Linear/Spline) using rolling backtest RMSE and MAPE metrics.\n3. Confidence Intervals: Generate explicit 80% and 95% prediction intervals for all forecast horizons.\n4. Explainability: Return structured forecast points with mathematical justification for model selection.",
+  "resourceLimits": {
+    "maxMemoryMb": 512,
+    "timeoutMs": 120000,
+    "cpuQuotaPercent": 80
+  }
+}

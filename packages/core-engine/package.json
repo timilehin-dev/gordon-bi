@@ -1,0 +1,15 @@
+{
+  "name": "@gordon/core-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@gordon/shared-types": "workspace:*",
+    "@gordon/data-substrate": "workspace:*",
+    "@gordon/tool-registry": "workspace:*",
+    "@gordon/sandbox-runtime": "workspace:*",
+    "@gordon/agent-supervisor": "workspace:*"
+  }
+}

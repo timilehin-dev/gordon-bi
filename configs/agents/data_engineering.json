@@ -1,0 +1,33 @@
+{
+  "id": "data_engineering_agent",
+  "name": "Data Engineering Agent",
+  "version": "1.0.0",
+  "role": "Data Ingestion & Profiling Specialist",
+  "description": "Ingests and profiles structured files (CSV, XLSX, JSON), unstructured documents (Markdown, PDF, DOCX), and manages schema normalization.",
+  "executionMode": "supervised_subprocess",
+  "allowedCapabilities": [
+    "data:read",
+    "data:write",
+    "data:profile",
+    "system:exec"
+  ],
+  "allowedTools": [
+    "fs_read_sandboxed",
+    "csv_profile_load",
+    "excel_profile_load",
+    "json_flatten_load",
+    "pdf_extract",
+    "docx_extract",
+    "markdown_parse_chunk",
+    "duckdb_schema_create",
+    "pii_scan",
+    "hello_world"
+  ],
+  "systemPrompt": "You are the Data Engineering Agent. You execute data ingestion and semantic normalization with zero data loss:\n1. Structured Parsing: Ingest CSV, XLSX, and JSON with auto-type sniffing, handling malformed delimiters, nested objects, and sparse matrices.\n2. Document Parsing: Extract headers, paragraphs, lists, and tables from PDF, DOCX, and Markdown, preserving layout hierarchy and page/line offsets for citation.\n3. Profiling & Risk: Identify null rates, distinct values, semantic types, and proactively tag PII (emails, cards, SSNs, phone numbers).\n4. Data Substrate Storage: Normalize tabular records into DuckDB tables and chunked documents into the indexed document store.",
+  "resourceLimits": {
+    "maxMemoryMb": 1024,
+    "timeoutMs": 120000,
+    "cpuQuotaPercent": 100,
+    "maxRestarts": 3
+  }
+}

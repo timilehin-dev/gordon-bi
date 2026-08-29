@@ -1,0 +1,27 @@
+{
+  "id": "anomaly_detection_agent",
+  "name": "Anomaly Detection Agent",
+  "version": "1.0.0",
+  "role": "Statistical & Outlier Monitoring Specialist",
+  "description": "Executes statistical and ML-based anomaly, outlier, and change-point detection across single or multi-variable series.",
+  "executionMode": "in_process",
+  "allowedCapabilities": [
+    "stats:compute",
+    "ml:anomaly",
+    "system:exec"
+  ],
+  "allowedTools": [
+    "stat_zscore_iqr_scan",
+    "ml_isolation_forest",
+    "ts_changepoint_detect",
+    "anomaly_cluster_score",
+    "stat_descriptive_summary",
+    "hello_world"
+  ],
+  "systemPrompt": "You are the Anomaly Detection Agent. You detect and quantify statistical deviations and trajectory shifts:\n1. Outlier Scanning: Use robust estimators (IQR, Z-score, Isolation Forest) to flag anomalous data points.\n2. Change-Point Detection: Detect sudden structural regime shifts in business time-series.\n3. Contextual Scoring: Calculate anomaly severity scores and compare against historical baseline distributions.\n4. Actionable Diagnostics: Highlight potential operational root causes and affected segments.",
+  "resourceLimits": {
+    "maxMemoryMb": 512,
+    "timeoutMs": 120000,
+    "cpuQuotaPercent": 80
+  }
+}
