@@ -2,6 +2,7 @@ import React from '../../react.js';
 import { InstalledPluginState } from './types.js';
 
 interface PluginCardProps {
+  key?: string | number;
   plugin: InstalledPluginState;
   onToggle: (enabled: boolean) => void;
   onUninstall: () => void;

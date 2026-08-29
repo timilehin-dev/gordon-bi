@@ -1,7 +1,16 @@
 // Standalone Zero-Dependency React Mock/Bridge for Desktop Environment
 
-export interface FC<P = {}> {
-  (props: P & { key?: any; children?: any }, context?: any): any;
+export type PropsWithChildren<P = {}> = P & { children?: any; key?: any };
+
+export type FC<P = {}> = (props: PropsWithChildren<P>, context?: any) => any;
+
+export type ReactNode = any;
+export type ReactElement = any;
+
+export interface FormEvent<T = any> {
+  preventDefault(): void;
+  stopPropagation(): void;
+  target: T;
 }
 
 export function useState<T>(initialState: T | (() => T)): [T, (newState: T | ((prevState: T) => T)) => void] {
@@ -29,10 +38,16 @@ export function useRef<T>(initialValue?: T): { current: T | undefined } {
   return { current: initialValue };
 }
 
-export interface FormEvent<T = any> {
-  preventDefault(): void;
-  stopPropagation(): void;
-  target: T;
+export namespace React {
+  export type FC<P = {}> = (props: PropsWithChildren<P>, context?: any) => any;
+  export type PropsWithChildren<P = {}> = P & { children?: any; key?: any };
+  export type ReactNode = any;
+  export type ReactElement = any;
+  export interface FormEvent<T = any> {
+    preventDefault(): void;
+    stopPropagation(): void;
+    target: T;
+  }
 }
 
 const React = {

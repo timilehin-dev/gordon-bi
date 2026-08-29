@@ -3,6 +3,7 @@ import { ChartSpec, VisualCardLayout } from '@gordon/shared-types';
 import { EChartsGenerator } from '@gordon/core-engine';
 
 interface VisualCardWrapperProps {
+  key?: string | number;
   card: VisualCardLayout;
   spec: ChartSpec;
   rows: any[];
