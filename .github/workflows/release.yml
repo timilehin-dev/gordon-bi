@@ -35,8 +35,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Upgrade npm to latest
-        run: npm install -g npm@latest
+      - name: Upgrade npm to 10.x
+        run: npm install -g npm@10
 
       - name: Setup Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
