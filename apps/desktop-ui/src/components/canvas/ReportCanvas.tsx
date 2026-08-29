@@ -97,11 +97,11 @@ export const ReportCanvas: React.FC<ReportCanvasProps> = ({
           </div>
 
           <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
-            {executiveReport.sections.map((sec, idx) => (
+            {executiveReport.sections.map((sec: any, idx: number) => (
               <div key={idx} className="space-y-1">
                 <h4 className="font-semibold text-slate-200">{sec.heading}</h4>
                 <p>
-                  {sec.content.split(/(\[cite:\s*[a-zA-Z0-9_\-:]+\])/g).map((part, pIdx) => {
+                  {sec.content.split(/(\[cite:\s*[a-zA-Z0-9_\-:]+\])/g).map((part: string, pIdx: number) => {
                     const match = part.match(/\[cite:\s*([a-zA-Z0-9_\-:]+)\]/);
                     if (match) {
                       const citeId = match[1];

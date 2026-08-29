@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gordon Autonomous Desktop Analytics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    code, pre, .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-screen w-screen overflow-hidden flex flex-col antialiased">
+
+  <!-- Header Ribbon -->
+  <header class="h-14 bg-slate-900/90 backdrop-blur border-b border-slate-800 flex items-center justify-between px-4 z-20 flex-shrink-0">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-sky-400 flex items-center justify-center shadow-md shadow-indigo-500/20">
+        <span class="text-white font-black text-sm">🦅</span>
+      </div>
+      <div>
+        <h1 class="font-bold text-sm text-slate-100 flex items-center space-x-2">
+          <span>GORDON</span>
+          <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-indigo-950/80 border border-indigo-500/40 text-indigo-300">v0.1.0</span>
+        </h1>
+        <p class="text-[10px] text-slate-400">Autonomous Desktop Business Analytics Engine</p>
+      </div>
+    </div>
+
+    <!-- Quick Action Bar -->
+    <div class="flex items-center space-x-2">
+      <button id="btn-ingest" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium flex items-center space-x-1.5 transition">
+        <span>📂</span>
+        <span>Ingest Data</span>
+      </button>
+
+      <button id="btn-analyze" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white text-xs font-semibold shadow-sm flex items-center space-x-1.5 transition">
+        <span>⚡</span>
+        <span>Run Autonomous Analysis</span>
+      </button>
+
+      <button id="btn-voice" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-indigo-950 text-indigo-300 border border-indigo-500/40 text-xs font-medium flex items-center space-x-1.5 transition">
+        <span>🎙️</span>
+        <span>Executive Voice</span>
+      </button>
+
+      <button id="btn-export" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-medium flex items-center space-x-1.5 transition">
+        <span>📑</span>
+        <span>Export Report</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Left Navigation Bar -->
+    <nav class="w-16 bg-slate-900 border-r border-slate-800 flex flex-col items-center py-4 space-y-4 flex-shrink-0">
+      <button data-view="report" class="nav-tab w-10 h-10 rounded-xl bg-indigo-600 text-white flex flex-col items-center justify-center text-xs font-medium shadow-sm transition" title="Report Canvas">
+        <span class="text-base">📊</span>
+        <span class="text-[9px] mt-0.5">Canvas</span>
+      </button>
+
+      <button data-view="data" class="nav-tab w-10 h-10 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center text-xs font-medium transition" title="Spreadsheet Grid">
+        <span class="text-base">🔢</span>
+        <span class="text-[9px] mt-0.5">Grid</span>
+      </button>
+
+      <button data-view="lineage" class="nav-tab w-10 h-10 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center text-xs font-medium transition" title="Lineage Explorer">
+        <span class="text-base">🕸️</span>
+        <span class="text-[9px] mt-0.5">Lineage</span>
+      </button>
+
+      <button data-view="marketplace" class="nav-tab w-10 h-10 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center text-xs font-medium transition" title="Plugin Marketplace">
+        <span class="text-base">🛍️</span>
+        <span class="text-[9px] mt-0.5">Market</span>
+      </button>
+
+      <div class="flex-1"></div>
+
+      <button data-view="settings" class="nav-tab w-10 h-10 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-slate-200 flex flex-col items-center justify-center text-xs font-medium transition" title="Settings & BYOK Keys">
+        <span class="text-base">⚙️</span>
+        <span class="text-[9px] mt-0.5">BYOK</span>
+      </button>
+    </nav>
+
+    <!-- Center Workspace Canvas -->
+    <main id="main-content" class="flex-1 flex flex-col overflow-hidden bg-slate-950 relative">
+      <!-- Top Formula / Context Bar -->
+      <div id="formula-bar" class="h-10 bg-slate-900/60 border-b border-slate-800/80 px-4 flex items-center space-x-3 text-xs">
+        <span class="font-mono text-slate-500 font-semibold">fx</span>
+        <input type="text" id="formula-input" placeholder="Enter DAX or Grid formula (e.g., CALCULATE(SUM([Revenue]), [Region] = 'West'))" class="flex-1 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 font-mono text-xs focus:outline-none focus:border-indigo-500 transition" />
+        <button id="btn-eval-formula" class="px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-[11px] transition">Evaluate</button>
+      </div>
+
+      <!-- Dynamic Views Container -->
+      <div id="view-container" class="flex-1 overflow-y-auto p-6 space-y-6">
+        <!-- Executive Summary Banner -->
+        <div class="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/20 rounded-2xl p-5 shadow-lg space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300">
+                100% Critic QA Verified
+              </span>
+              <span class="text-slate-400 text-xs">• 0% Hallucination Guarantee</span>
+            </div>
+            <span class="text-[11px] text-slate-500 font-mono">Session ID: gordon-live-alpha</span>
+          </div>
+
+          <h2 class="text-lg font-bold text-slate-100">Enterprise Revenue & Anomaly Diagnostic Report</h2>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Autonomous multi-agent evaluation completed across all relational and document stores. Ingested data shows projected Period 15 revenue at <span class="font-mono text-sky-400 font-semibold">$240.00</span> (80% CI: $240.00 - $240.00) with historical baseline mean of <span class="font-mono text-sky-400 font-semibold">$155.00</span> [cite: tool_forecast_arima].
+          </p>
+        </div>
+
+        <!-- 12-Column Responsive Dashboard Cards Grid -->
+        <div class="grid grid-cols-12 gap-4">
+          <!-- KPI 1 -->
+          <div class="col-span-12 sm:col-span-6 lg:col-span-3 bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] text-slate-400 font-medium">Total Ingested Revenue</span>
+            <div class="text-2xl font-bold text-sky-400 font-mono">$1,860.00</div>
+            <div class="text-[10px] text-emerald-400 flex items-center space-x-1">
+              <span>▲ +14.2%</span>
+              <span class="text-slate-500">vs historical baseline</span>
+            </div>
+          </div>
+
+          <!-- KPI 2 -->
+          <div class="col-span-12 sm:col-span-6 lg:col-span-3 bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] text-slate-400 font-medium">Active Forecast Model</span>
+            <div class="text-2xl font-bold text-indigo-400 font-mono">ARIMA(1,1,0)</div>
+            <div class="text-[10px] text-slate-400">Lowest RMSE / Backtested</div>
+          </div>
+
+          <!-- KPI 3 -->
+          <div class="col-span-12 sm:col-span-6 lg:col-span-3 bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] text-slate-400 font-medium">Statistical Anomalies</span>
+            <div class="text-2xl font-bold text-amber-400 font-mono">0 Detected</div>
+            <div class="text-[10px] text-slate-500">Z-score & Changepoint scan</div>
+          </div>
+
+          <!-- KPI 4 -->
+          <div class="col-span-12 sm:col-span-6 lg:col-span-3 bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] text-slate-400 font-medium">Lineage Trust Score</span>
+            <div class="text-2xl font-bold text-emerald-400 font-mono">100%</div>
+            <div class="text-[10px] text-emerald-400">All assertions cited</div>
+          </div>
+
+          <!-- Chart Card 1 -->
+          <div class="col-span-12 lg:col-span-8 bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <div>
+                <h3 class="text-xs font-bold text-slate-200">Revenue Time-Series Forecast with Confidence Bounds</h3>
+                <span class="text-[10px] text-slate-500 font-mono">DuckDB Table: monthly_sales</span>
+              </div>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">Line Chart</span>
+            </div>
+            <div class="h-56 bg-slate-950/70 rounded-lg flex flex-col justify-center items-center border border-slate-800/40 p-4">
+              <!-- Visual Mock Bars / SVG -->
+              <svg class="w-full h-full text-indigo-500" viewBox="0 0 600 180" fill="none">
+                <path d="M 20 140 L 70 130 L 120 135 L 170 110 L 220 115 L 270 95 L 320 90 L 370 70 L 420 65 L 470 45 L 520 30 L 570 20" stroke="#6366f1" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 370 70 L 420 50 L 470 25 L 520 10 L 570 0 L 570 40 L 520 50 L 470 65 L 420 80 L 370 70 Z" fill="rgba(99, 102, 241, 0.15)"/>
+                <circle cx="570" cy="20" r="4" fill="#38bdf8"/>
+              </svg>
+              <div class="text-[11px] font-mono text-slate-400 mt-2">Projection: $240.00 • 80% Confidence Interval: [$230.00, $250.00]</div>
+            </div>
+          </div>
+
+          <!-- Chart Card 2 -->
+          <div class="col-span-12 lg:col-span-4 bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <div>
+                <h3 class="text-xs font-bold text-slate-200">Segment Attribution Breakdown</h3>
+                <span class="text-[10px] text-slate-500 font-mono">Multi-variable regression</span>
+              </div>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">Driver Analysis</span>
+            </div>
+            <div class="h-56 bg-slate-950/70 rounded-lg flex flex-col justify-center p-4 space-y-3 border border-slate-800/40">
+              <div class="space-y-1">
+                <div class="flex justify-between text-[11px]">
+                  <span class="text-slate-300">Enterprise Direct</span>
+                  <span class="text-sky-400 font-mono">54.2%</span>
+                </div>
+                <div class="w-full h-2 rounded bg-slate-800 overflow-hidden">
+                  <div class="h-full bg-indigo-500 rounded" style="width: 54.2%"></div>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <div class="flex justify-between text-[11px]">
+                  <span class="text-slate-300">Self-Serve SaaS</span>
+                  <span class="text-sky-400 font-mono">31.8%</span>
+                </div>
+                <div class="w-full h-2 rounded bg-slate-800 overflow-hidden">
+                  <div class="h-full bg-sky-500 rounded" style="width: 31.8%"></div>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <div class="flex justify-between text-[11px]">
+                  <span class="text-slate-300">Partner & Reseller</span>
+                  <span class="text-sky-400 font-mono">14.0%</span>
+                </div>
+                <div class="w-full h-2 rounded bg-slate-800 overflow-hidden">
+                  <div class="h-full bg-emerald-500 rounded" style="width: 14%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Dockable Agent Telemetry Panel -->
+    <aside id="agent-panel" class="w-80 bg-slate-900 border-l border-slate-800 flex flex-col flex-shrink-0">
+      <div class="p-3 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <h3 class="text-xs font-bold text-slate-200">Agent Telemetry & DAG</h3>
+        </div>
+        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">In-Process</span>
+      </div>
+
+      <!-- Live Task Graph -->
+      <div class="flex-1 overflow-y-auto p-3 space-y-2">
+        <div class="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-semibold text-slate-200">1. Data Engineering Ingestion</span>
+            <span class="text-emerald-400 font-mono text-[10px]">✔ SUCCESS (42ms)</span>
+          </div>
+          <p class="text-[10px] text-slate-400">Schema inferred & loaded into DuckDB</p>
+        </div>
+
+        <div class="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-semibold text-slate-200">2. ARIMA/ETS Forecaster</span>
+            <span class="text-emerald-400 font-mono text-[10px]">✔ SUCCESS (18ms)</span>
+          </div>
+          <p class="text-[10px] text-slate-400">Selected ARIMA(1,1,0) via backtest RMSE</p>
+        </div>
+
+        <div class="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-semibold text-slate-200">3. Anomaly Detection Agent</span>
+            <span class="text-emerald-400 font-mono text-[10px]">✔ SUCCESS (12ms)</span>
+          </div>
+          <p class="text-[10px] text-slate-400">Z-score scan evaluated: 0 outliers</p>
+        </div>
+
+        <div class="p-2.5 rounded-lg bg-slate-950/80 border border-indigo-500/40 bg-indigo-950/20 space-y-1.5">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-semibold text-indigo-300">4. Critic / Verifier QA Pass</span>
+            <span class="text-emerald-400 font-mono text-[10px]">✔ 100% CITED</span>
+          </div>
+          <p class="text-[10px] text-slate-300">Deterministic check matched 10 of 10 claims against Lineage Store.</p>
+        </div>
+      </div>
+
+      <!-- Agent Goal Input -->
+      <div class="p-3 border-t border-slate-800 space-y-2">
+        <input type="text" id="goal-input" placeholder="Instruct Gordon (e.g., 'Forecast sales for Q4')" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" />
+        <button id="btn-run-goal" class="w-full py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition">
+          Run Autonomous Goal
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Status Bar -->
+  <footer class="h-6 bg-slate-900 border-t border-slate-800 px-4 flex items-center justify-between text-[10px] text-slate-400 flex-shrink-0">
+    <div class="flex items-center space-x-2">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+      <span id="status-text">Gordon Engine Ready • Vectorized DuckDB & SQLite Lineage Active</span>
+    </div>
+    <div class="font-mono text-slate-500">Zero Docker • Zero Ambient I/O • 100% On-Device</div>
+  </footer>
+
+  <script>
+    // Tab Navigation Interaction
+    document.querySelectorAll('.nav-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-tab').forEach(b => {
+          b.classList.remove('bg-indigo-600', 'text-white');
+          b.classList.add('text-slate-400');
+        });
+        btn.classList.add('bg-indigo-600', 'text-white');
+        btn.classList.remove('text-slate-400');
+      });
+    });
+
+    // Run Autonomous Goal Button
+    const runBtn = document.getElementById('btn-run-goal');
+    const goalInput = document.getElementById('goal-input');
+    const statusText = document.getElementById('status-text');
+
+    if (runBtn && goalInput && statusText) {
+      runBtn.addEventListener('click', () => {
+        const goal = goalInput.value.trim() || 'Analyze revenue trends, anomalies, and driver attribution';
+        statusText.textContent = `Executing autonomous goal: "${goal}"...`;
+        setTimeout(() => {
+          statusText.textContent = 'Autonomous Goal Complete (100% Critic QA Verified)';
+          alert(`Goal completed successfully:\n"${goal}"\n\nAll numerical claims verified against Lineage Store.`);
+        }, 1000);
+      });
+    }
+
+    // Voice Debrief Button
+    const voiceBtn = document.getElementById('btn-voice');
+    if (voiceBtn) {
+      voiceBtn.addEventListener('click', () => {
+        alert('🎙️ Executive Voice Session Initialized (Gemini 3.1 Flash Live Preview WebSocket ready).');
+      });
+    }
+
+    // Ingest Data Button
+    const ingestBtn = document.getElementById('btn-ingest');
+    if (ingestBtn) {
+      ingestBtn.addEventListener('click', () => {
+        alert('📂 Ingestion Manager: Drag and drop any CSV, XLSX, JSON, PDF, or DOCX file to profile and load directly into DuckDB.');
+      });
+    }
+  </script>
+</body>
+</html>

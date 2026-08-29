@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
+  build-desktop-binaries:
     strategy:
       fail-fast: false
       matrix:
@@ -86,14 +86,30 @@ jobs:
             }
           "
 
-      - name: Upload Release Artifacts
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Save Bundle Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          files: |
-            src-tauri/target/${{ matrix.target }}/release/bundle/**/*
+          name: binaries-${{ matrix.target }}
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/
+          if-no-files-found: ignore
+
+  publish-github-release:
+    needs: build-desktop-binaries
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download All Platform Binaries
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets/
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/**/*
           generate_release_notes: true
           draft: false
           prerelease: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

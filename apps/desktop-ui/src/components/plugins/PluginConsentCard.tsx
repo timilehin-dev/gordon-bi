@@ -36,7 +36,7 @@ export const PluginConsentCard: React.FC<PluginConsentCardProps> = ({
           </p>
 
           <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
-            {consent.plainEnglishPermissions.map((perm, idx) => {
+            {consent.plainEnglishPermissions.map((perm: any, idx: number) => {
               const badgeColor =
                 perm.riskLevel === 'high'
                   ? 'bg-rose-950 text-rose-300 border-rose-500/40'

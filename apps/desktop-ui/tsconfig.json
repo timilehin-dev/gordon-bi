@@ -13,7 +13,24 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@gordon/shared-types": ["../../packages/shared-types/src/index.ts"],
+      "@gordon/shared-types/*": ["../../packages/shared-types/src/*"],
+      "@gordon/data-substrate": ["../../packages/data-substrate/src/index.ts"],
+      "@gordon/data-substrate/*": ["../../packages/data-substrate/src/*"],
+      "@gordon/tool-registry": ["../../packages/tool-registry/src/index.ts"],
+      "@gordon/tool-registry/*": ["../../packages/tool-registry/src/*"],
+      "@gordon/sandbox-runtime": ["../../packages/sandbox-runtime/src/index.ts"],
+      "@gordon/sandbox-runtime/*": ["../../packages/sandbox-runtime/src/*"],
+      "@gordon/agent-supervisor": ["../../packages/agent-supervisor/src/index.ts"],
+      "@gordon/agent-supervisor/*": ["../../packages/agent-supervisor/src/*"],
+      "@gordon/core-engine": ["../../packages/core-engine/src/index.ts"],
+      "@gordon/core-engine/*": ["../../packages/core-engine/src/*"],
+      "@gordon/node-plugin-sdk": ["../../packages/node-plugin-sdk/src/index.ts"],
+      "@gordon/node-plugin-sdk/*": ["../../packages/node-plugin-sdk/src/*"]
+    }
   },
   "include": ["src/**/*"]
 }

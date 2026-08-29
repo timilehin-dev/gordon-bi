@@ -13,14 +13,24 @@ src-tauri/target/
 .turbo/
 .tsbuildinfo
 
+# Compiled JavaScript and TypeScript declarations from packages
+packages/**/*.js
+packages/**/*.d.ts
+packages/**/*.d.ts.map
+packages/**/*.js.map
+apps/**/dist/
+apps/**/*.d.ts
+apps/**/*.d.ts.map
+apps/**/*.js.map
+!apps/desktop-ui/build.js
+!src-tauri/generate_icons.js
+
 # Python artifacts
 __pycache__/
 *.py[cod]
 *$py.class
 *.egg-info/
 .eggs/
-dist/
-build/
 .pytest_cache/
 .venv/
 venv/
