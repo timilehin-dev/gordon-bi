@@ -6,10 +6,10 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "dependencies": {
-    "@gordon/shared-types": "workspace:*",
-    "@gordon/data-substrate": "workspace:*",
-    "@gordon/tool-registry": "workspace:*",
-    "@gordon/sandbox-runtime": "workspace:*",
-    "@gordon/agent-supervisor": "workspace:*"
+    "@gordon/shared-types": "*",
+    "@gordon/data-substrate": "*",
+    "@gordon/tool-registry": "*",
+    "@gordon/sandbox-runtime": "*",
+    "@gordon/agent-supervisor": "*"
   }
 }
