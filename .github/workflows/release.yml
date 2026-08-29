@@ -111,5 +111,6 @@ jobs:
           draft: false
           prerelease: false
           fail_on_unmatched_files: false
+          token: ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
