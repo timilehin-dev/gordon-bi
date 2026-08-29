@@ -1,7 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { ReleaseBuilderTool } from '@gordon/core-engine';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 test('Milestone 15 Acceptance Test - Multi-Platform Release Packaging & GitHub Actions CI/CD', async () => {
   const startTime = Date.now();
@@ -47,8 +52,8 @@ test('Milestone 15 Acceptance Test - Multi-Platform Release Packaging & GitHub A
   assert.ok(linuxBuild.estimatedInstallerSizeBytes < 100 * 1024 * 1024);
 
   // 4. Verify GitHub Actions CI/CD Workflow file exists and defines target platforms
-  const workflowPath = 'c:/Users/HP/Downloads/gordon/.github/workflows/release.yml';
-  assert.ok(existsSync(workflowPath));
+  const workflowPath = resolve(__dirname, '../../.github/workflows/release.yml');
+  assert.ok(existsSync(workflowPath), `Workflow file not found at: ${workflowPath}`);
 
   const workflowContent = readFileSync(workflowPath, 'utf-8');
   assert.ok(workflowContent.includes('windows-latest'));
