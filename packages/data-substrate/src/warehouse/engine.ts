@@ -79,8 +79,9 @@ export class WarehouseEngine {
   }
 
   public async getTableSchema(tableName: string): Promise<WarehouseTableSchema> {
+    const safeTableName = tableName.replace(/'/g, "''");
     const result = await this.execute<{ column_name: string; data_type: string; is_nullable: string }>(
-      `SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name='${tableName}'`
+      `SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name='${safeTableName}'`
     );
 
     if (result.rows.length === 0) {

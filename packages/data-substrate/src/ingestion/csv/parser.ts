@@ -39,14 +39,16 @@ export class CsvIngestionParser {
         throw new IngestionError('No headers detected in CSV file', 'INVALID_HEADERS', filePath);
       }
 
-      // Parse data rows & infer types
+      // Parse data rows & infer types (sampling up to first 2000 rows for high performance)
       const dataRows = lines.slice(1).map(line => this.parseLine(line, delimiter));
-      const columnTypes = this.inferColumnTypes(headers, dataRows);
+      const sampleRows = dataRows.length > 2000 ? dataRows.slice(0, 2000) : dataRows;
+      const columnTypes = this.inferColumnTypes(headers, sampleRows);
 
       // Create DuckDB Table
-      const createCols = headers.map(h => `"${h}" ${columnTypes[h] || 'VARCHAR'}`).join(', ');
-      await this.warehouse.execute(`DROP TABLE IF EXISTS "${tableName}"`);
-      await this.warehouse.execute(`CREATE TABLE "${tableName}" (${createCols})`);
+      const createCols = headers.map(h => `"${h.replace(/"/g, '""')}" ${columnTypes[h] || 'VARCHAR'}`).join(', ');
+      const safeTableName = tableName.replace(/"/g, '""');
+      await this.warehouse.execute(`DROP TABLE IF EXISTS "${safeTableName}"`);
+      await this.warehouse.execute(`CREATE TABLE "${safeTableName}" (${createCols})`);
 
       // Insert in batches
       const batchSize = 500;
@@ -61,7 +63,7 @@ export class CsvIngestionParser {
         }).join(', ');
 
         if (valueClauses.length > 0) {
-          await this.warehouse.execute(`INSERT INTO "${tableName}" VALUES ${valueClauses}`);
+          await this.warehouse.execute(`INSERT INTO "${safeTableName}" VALUES ${valueClauses}`);
         }
       }
 

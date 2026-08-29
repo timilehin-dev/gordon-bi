@@ -1,23 +1,29 @@
 import { ExtractedNumericClaim } from './types.js';
 
 export class ClaimExtractor {
+  // Pre-compiled regex patterns for optimal performance and zero backtracking
+  private static readonly CITE_REGEX = /\[(?:cite|ref):\s*([a-zA-Z0-9_\-:]+)\]/i;
+  private static readonly CURRENCY_REGEX = /(-?)\$([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]+)?|\d+(?:\.\d+)?)/g;
+  private static readonly PERCENT_REGEX = /(-?\d+(?:\.\d+)?)\s*%/g;
+  private static readonly NUMBER_REGEX = /(-?\b[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|-?\b\d+\.\d+)/g;
+
   public static extractClaims(narrativeText: string): ExtractedNumericClaim[] {
     const claims: ExtractedNumericClaim[] = [];
     const rawSentences = narrativeText
-      .split(/(?<=[.?!])\s+(?=[A-Z#"'\n]|\b[A-Z])/)
-      .flatMap(s => s.split(/\n+/))
+      .split(/\n+/)
+      .flatMap(paragraph => paragraph.split(/(?<=[.?!])\s+/))
       .map(s => s.trim())
       .filter(s => s.length > 0);
 
     for (const sentence of rawSentences) {
       // Extract citation if present: [cite: tool_123] or [cite: doc_456]
-      const citeMatch = sentence.match(/\[(?:cite|ref):\s*([a-zA-Z0-9_\-:]+)\]/i);
+      const citeMatch = sentence.match(ClaimExtractor.CITE_REGEX);
       const citationId = citeMatch ? citeMatch[1] : undefined;
 
       const capturedRanges: Array<{ start: number; end: number }> = [];
 
       // 1. Currency patterns: $12,345.67, -$500.00
-      for (const match of sentence.matchAll(/(-?)\$([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]+)?|\d+(?:\.\d+)?)/g)) {
+      for (const match of sentence.matchAll(ClaimExtractor.CURRENCY_REGEX)) {
         const raw = match[0];
         const start = match.index!;
         const end = start + raw.length;
@@ -38,7 +44,7 @@ export class ClaimExtractor {
       }
 
       // 2. Percentage patterns: 24.5%, -12%, 32%
-      for (const match of sentence.matchAll(/(-?\d+(?:\.\d+)?)\s*%/g)) {
+      for (const match of sentence.matchAll(ClaimExtractor.PERCENT_REGEX)) {
         const raw = match[0];
         const start = match.index!;
         const end = start + raw.length;
@@ -58,7 +64,7 @@ export class ClaimExtractor {
       }
 
       // 3. General numbers: decimals, integers with commas, negative decimals
-      for (const match of sentence.matchAll(/(-?\b[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|-?\b\d+\.\d+)/g)) {
+      for (const match of sentence.matchAll(ClaimExtractor.NUMBER_REGEX)) {
         const raw = match[0];
         const start = match.index!;
         const end = start + raw.length;
