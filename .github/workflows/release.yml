@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   build-desktop-binaries:
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -59,7 +60,12 @@ jobs:
         run: npm run build --workspace=apps/desktop-ui
 
       - name: Build Tauri Desktop Native Binary
-        run: npx tauri build --target ${{ matrix.target }}
+        uses: nick-invision/retry@v3
+        with:
+          timeout_minutes: 30
+          max_attempts: 3
+          retry_wait_seconds: 15
+          command: npx tauri build --target ${{ matrix.target }}
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
 
