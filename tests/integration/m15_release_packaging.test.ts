@@ -60,7 +60,7 @@ test('Milestone 15 Acceptance Test - Multi-Platform Release Packaging & GitHub A
   assert.ok(workflowContent.includes('macos-latest'));
   assert.ok(workflowContent.includes('ubuntu-22.04'));
   assert.ok(workflowContent.includes('tauri build'));
-  assert.ok(workflowContent.includes('softprops/action-gh-release'));
+  assert.ok(workflowContent.includes('gh release create'));
 
   const durationMs = Date.now() - startTime;
   console.log(`[M15 Benchmark] Packaging & Release CI/CD Suite Duration: ${durationMs}ms`);

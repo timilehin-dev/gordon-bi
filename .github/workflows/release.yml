@@ -104,13 +104,8 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - name: Checkout Code (needed for gh CLI context)
+      - name: Checkout Code
         uses: actions/checkout@v4
-
-      - name: Delete Stale Release (if exists)
-        run: gh release delete "${{ github.ref_name }}" --yes --cleanup-tag || true
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download All Platform Binaries
         uses: actions/download-artifact@v4
@@ -120,14 +115,19 @@ jobs:
       - name: List Downloaded Assets
         run: find release-assets/ -type f | head -50
 
-      - name: Publish to GitHub Releases
-        uses: softprops/action-gh-release@v2.0.8
-        with:
-          files: release-assets/**/*
-          generate_release_notes: true
-          draft: false
-          prerelease: false
-          fail_on_unmatched_files: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Delete Stale Release (if exists)
+        run: gh release delete "${{ github.ref_name }}" --yes || true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release and Upload Assets
+        run: |
+          sleep 3
+          FILES=$(find release-assets/ -type f | tr '\n' ' ')
+          echo "Uploading files: $FILES"
+          gh release create "${{ github.ref_name }}" \
+            --title "Gordon ${{ github.ref_name }}" \
+            --generate-notes \
+            $FILES
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
