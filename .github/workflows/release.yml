@@ -104,7 +104,7 @@ jobs:
           path: release-assets/
 
       - name: Publish to GitHub Releases
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.0.8
         with:
           files: release-assets/**/*
           generate_release_notes: true
